@@ -16,9 +16,9 @@ pgcd:
 .etape1:
     cmp rdi,rsi
     jg pgcd.etape1b
-    xor rdx, rdx; 
+    xor rdx, rdx; ;cas rsi>rdi
     mov rax, rsi
-    div rdi
+    div rdi ;rsi%rdi
     mov rsi,rdx
     cmp rdx,0
     jne pgcd.etape1
@@ -26,10 +26,10 @@ pgcd:
     ret
 
 
-.etape1b:
+.etape1b:;cas où rdi>rsi
     xor rdx, rdx; 
     mov rax, rdi
-    div rsi 
+    div rsi ;rdi%rsi
     mov rdi,rdx
     cmp rdx,0
     jne pgcd.etape1
@@ -37,6 +37,6 @@ pgcd:
     ret
 
 
-.entre_egal:
+.entre_egal:;cas où rdi==rsi
     mov rax,rdi
     ret
