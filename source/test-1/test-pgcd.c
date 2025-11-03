@@ -17,16 +17,22 @@ int test_pgcd(int a,int b,int c){
 
 int main(){
     int test=0;
+    printf("Lancement test pgcd\n");
     test=test||test_pgcd(12,10,2);
     test=test||test_pgcd(12,15,3);
     test=test||test_pgcd(12,12,12);
     test=test||test_pgcd(8,10,2);
+    if(!test){
+        printf("PGCD OK\n");
+    }else{
+        printf("PGCD Err\n");
+    }
 
     
 
 
 
-
+    return test;
 
 
 }
