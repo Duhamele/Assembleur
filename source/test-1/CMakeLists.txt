@@ -1,0 +1,1 @@
+add_executable(programme-1 main.c)
