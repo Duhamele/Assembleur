@@ -11,6 +11,11 @@ somme:
 
 
 pgcd:
+    cmp rdi,0
+    je pgcd.retour0
+    cmp rsi, 0
+    je pgcd.retour0
+
 
 .etape1:
     cmp rdi,rsi
@@ -34,7 +39,9 @@ pgcd:
     jne pgcd.etape1
     mov rax, rsi
     ret
-
+.retour0:
+    mov rax,0
+    ret
 
 
 

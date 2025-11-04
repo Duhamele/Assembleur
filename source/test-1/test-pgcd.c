@@ -7,10 +7,10 @@ int test_pgcd(int a,int b,int c){
     int d=pgcd(a,b);
     printf("\t%i\n",d);
     if(c==d){
-        printf("Résultat Ok");
+        printf("Résultat Ok\n");
         return 0;
     }else{
-        printf("Résultat Err");
+        printf("Résultat Err\n");
         return -1;
     }
 }
