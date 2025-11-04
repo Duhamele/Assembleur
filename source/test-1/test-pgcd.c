@@ -22,6 +22,7 @@ int main(){
     test=test||test_pgcd(12,15,3);
     test=test||test_pgcd(12,12,12);
     test=test||test_pgcd(8,10,2);
+    test=test||test_pgcd(8,00,0);
     if(!test){
         printf("PGCD OK\n");
     }else{

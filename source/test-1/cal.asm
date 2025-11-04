@@ -11,8 +11,7 @@ somme:
 
 
 pgcd:
-    cmp rdi,rsi
-    je pgcd.entre_egal
+
 .etape1:
     cmp rdi,rsi
     jg pgcd.etape1b
@@ -37,6 +36,6 @@ pgcd:
     ret
 
 
-.entre_egal:;cas où rdi==rsi
-    mov rax,rdi
-    ret
+
+
+section .note.GNU-stack noalloc noexec nowrite progbits
