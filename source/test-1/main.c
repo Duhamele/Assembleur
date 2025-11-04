@@ -22,7 +22,12 @@ int main(){
     test=test||test_somme(7,3,10);
     test=test||test_somme(7,0,7);
     test=test||test_somme(-5,2,-3);
-
+    test=test||test_somme(-5,-7,-12);
+    if(!test){
+        printf("Somme OK\n");
+    }else{
+        printf("Somme Err\n");
+    }
     return test;
     
 }
