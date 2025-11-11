@@ -5,3 +5,4 @@ struct nombre_fact{
 }nombre_fact_t;
 
 extern nombre_fact_t add_fact(nombre_fact_t a, nombre_fact_t b);
+//fvzrpkjngrge
