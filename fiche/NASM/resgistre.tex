@@ -1,9 +1,15 @@
 \documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\title{Resgistre X86}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{hyperref}
+\title{NASM X86}
 \begin{document}
 	\maketitle
-	
+	\section{Resgistre}
 	\begin{tabular}{|c|c|c|c|c|c|}
 		\hline
 	Regitre 64b	&registre 32b  & resgistre 16b  &resgistre 8b  & resgistre 8b 15-8 &  descrisptive\\
@@ -29,4 +35,101 @@
 	\end{tabular}
 	Registre Xmm, 128bit pour les vecteurs.\\
 	Xmm0-Xmm15
+
+
+\section{Argument}
+	les six premiers argument sont:\\
+	(rdi, rsi, rdx, rcx, r8, r9).
+	
+\section{Division}
+En assembleur x86-64 (NASM), les opérations arithmétiques de multiplication et de division sont réalisées avec des instructions spécifiques :
+\begin{itemize}
+	\item \textbf{mul} : multiplication non signée.
+	\item \textbf{imul} : multiplication signée.
+	\item \textbf{div} : division non signée.
+	\item \textbf{idiv} : division signée.
+\end{itemize}
+
+Ces instructions utilisent des registres prédéfinis, en particulier \texttt{RAX} et \texttt{RDX}.
+
+\section{Instruction \texttt{mul} (non signée)}
+\subsection{Description}
+\texttt{mul op} réalise : \texttt{RAX = RAX * op}. Le résultat complet est stocké dans le couple \texttt{RDX:RAX}.
+
+\begin{center}
+	\begin{tabular}{|c|c|c|}
+		\hline
+		Taille opérande & Multiplication & Résultat \\
+		\hline
+		8 bits & AL × op & AX \\
+		16 bits & AX × op & DX:AX \\
+		32 bits & EAX × op & EDX:EAX \\
+		64 bits & RAX × op & RDX:RAX \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsection{Exemple}
+\begin{lstlisting}[language={[x86masm]Assembler}]
+	mov     rax, 6
+	mov     rbx, 7
+	mul     rbx        ; RAX = 42, RDX = 0
+\end{lstlisting}
+
+\section{Instruction \texttt{imul} (signée)}
+\subsection{Modes d'utilisation}
+\begin{itemize}
+	\item \textbf{1 opérande :} \texttt{imul op} → \texttt{RAX = RAX * op}
+	\item \textbf{2 opérandes :} \texttt{imul reg, op} → \texttt{reg = reg * op}
+	\item \textbf{3 opérandes :} \texttt{imul reg, op1, op2} → \texttt{reg = op1 * op2}
+\end{itemize}
+
+\subsection{Exemple}
+\begin{lstlisting}[language={[x86masm]Assembler}]
+	mov     rax, -5
+	mov     rbx, 3
+	imul    rbx        ; RAX = -15
+\end{lstlisting}
+
+\section{Division : \texttt{div} et \texttt{idiv}}
+\subsection{Description}
+Avant la division, le dividende doit être placé dans le couple \texttt{RDX:RAX}.
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		Taille & Dividende & Quotient & Reste \\
+		\hline
+		8 bits & AX & AL & AH \\
+		16 bits & DX:AX & AX & DX \\
+		32 bits & EDX:EAX & EAX & EDX \\
+		64 bits & RDX:RAX & RAX & RDX \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsection{Exemple non signé}
+\begin{lstlisting}[language={[x86masm]Assembler}]
+	mov     rax, 50      ; dividende bas
+	xor     rdx, rdx     ; RDX = 0 (dividende haut)
+	mov     rbx, 7       ; diviseur
+	div     rbx          ; RAX = 7, RDX = 1
+\end{lstlisting}
+
+\subsection{Exemple signé (\texttt{idiv})}
+\begin{lstlisting}[language={[x86masm]Assembler}]
+	mov     rax, -50
+	cqo                 ; étend le signe dans RDX (convert quadword)
+	mov     rbx, 7
+	idiv    rbx         ; RAX = -7, RDX = -1
+\end{lstlisting}
+
+\section{Résumé}
+\begin{itemize}
+	\item \texttt{mul} et \texttt{div} : nombres non signés.
+	\item \texttt{imul} et \texttt{idiv} : nombres signés.
+	\item Résultat des multiplications longues dans \texttt{RDX:RAX}.
+	\item Pour diviser, le dividende doit être dans \texttt{RDX:RAX}.
+\end{itemize}
+
 \end{document}

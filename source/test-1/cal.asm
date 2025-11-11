@@ -46,3 +46,41 @@ pgcd:
 
 
 section .note.GNU-stack noalloc noexec nowrite progbits
+
+section .text
+
+add_fact:
+    push rdi;quotion a
+    push rsi;div a
+    push rdx;quo b
+    push rcx;div b
+    mov rdi, rcx
+    call pgcd;
+    mov rcx,rax; sauvegarde pgcd dans rcx
+    pop rax;div b
+    xor rdx,rdx
+    div rcx; divb /pgcd
+    pop r9;quo b
+    mul r9
+    mov r12,rax;poid faible
+    mov r11,rdx; poids fort
+    pop rax;div a
+    xor rdx,rdx
+    div rcx
+    pop r9;quo a
+    mul r9;
+    add r11,rdx
+    add r12,rax
+    jnc add_fact.suite
+    add r11,1
+.suite:
+    
+
+
+
+
+
+
+
+
+
