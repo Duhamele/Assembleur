@@ -85,19 +85,23 @@ add_fact:
     jne add_fact.pgcd128
     cmp r11,0
     jne add_fact.pgcd128
-    push2p r14:r12
+    push r14
+    push r12; r14 div,r12 quo
     mov rdi,r14
     mov rsi,r12
-    call pgcd
+    call pgcd;pgcd de div quo final
     mov r13,rax
-    pop2p rax:r12
+    pop r12
+    pop rax
     div r13
-    
-
-
+    mov r14,rax;div
+    mov rax,r12
+    div r13
+    mov rdx,r14
+    ret
 
 .pgcd128:
-
+    ret ; todo pgcd pour int128
     
 
 
