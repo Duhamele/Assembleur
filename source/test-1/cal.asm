@@ -81,7 +81,22 @@ add_fact:
     add r13,rdx;poid fort du div
     add r14,rax;poid faible du div
     ;todo pgcd du quo et div 128 bit
+    cmp r13,0
+    jne add_fact.pgcd128
+    cmp r11,0
+    jne add_fact.pgcd128
+    push2p r14:r12
+    mov rdi,r14
+    mov rsi,r12
+    call pgcd
+    mov r13,rax
+    pop2p rax:r12
+    div r13
+    
 
+
+
+.pgcd128:
 
     
 
