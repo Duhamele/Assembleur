@@ -65,15 +65,24 @@ add_fact:
     mov r12,rax;poid faible
     mov r11,rdx; poids fort
     pop rax;div a
+    mov r14,rax;div a
     xor rdx,rdx
-    div rcx
+    div rcx;div a/ pgcd
     pop r9;quo a
+    mov r13,rax;div a/ pgcd
     mul r9;
-    add r11,rdx
-    add r12,rax
+    add r11,rdx;poid fort du quo
+    add r12,rax;poid faible du quo
     jnc add_fact.suite
     add r11,1
 .suite:
+    mov rax,r14
+    mul r13
+    add r13,rdx;poid fort du div
+    add r14,rax;poid faible du div
+    ;todo pgcd du quo et div 128 bit
+
+
     
 
 
