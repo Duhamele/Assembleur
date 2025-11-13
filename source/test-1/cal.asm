@@ -1,5 +1,6 @@
 global somme
 global pgcd
+global add_fact
 section .text
 
 
