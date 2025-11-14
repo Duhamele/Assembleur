@@ -51,61 +51,77 @@ section .note.GNU-stack noalloc noexec nowrite progbits
 section .text
 
 add_fact:
-    push rdi;quotion a
-    push rsi;div a
-    push rdx;quo b
-    push rcx;div b
-    mov rdi, rcx
-    call pgcd;
-    mov rcx,rax; sauvegarde pgcd dans rcx
-    pop rax;div b
-    xor rdx,rdx
-    div rcx; divb /pgcd
-    pop r9;quo b
-    mul r9
-    mov r12,rax;poid faible
-    mov r11,rdx; poids fort
-    pop rax;div a
-    mov r14,rax;div a
-    xor rdx,rdx
-    div rcx;div a/ pgcd
-    pop r9;quo a
-    mov r13,rax;div a/ pgcd
-    mul r9;
-    add r11,rdx;poid fort du quo
-    add r12,rax;poid faible du quo
-    jnc add_fact.suite
-    add r11,1
-.suite:
-    mov rax,r14
-    mul r13
-    add r13,rdx;poid fort du div
-    add r14,rax;poid faible du div
-    ;todo pgcd du quo et div 128 bit
-    cmp r13,0
-    jne add_fact.pgcd128
-    cmp r11,0
-    jne add_fact.pgcd128
+    ; save non-volatile registers we will use (r12-r15, rbx)
+    ; sauvegarde de la mémoire non volatile 
+    push r12
+    push r13
     push r14
-    push r12; r14 div,r12 quo
-    mov rdi,r14
-    mov rsi,r12
-    call pgcd;pgcd de div quo final
-    mov r13,rax
-    pop r12
-    pop rax
-    div r13
-    mov r14,rax;div
-    mov rax,r12
-    div r13
-    mov rdx,r14
-    ret
-
-.pgcd128:
-    ret ; todo pgcd pour int128
+    push r15
+    push rbx
     
 
 
+    ;mis des valeur dans des registtre 
+    mov r12, rdi    ; r12 <- a.quotien
+    mov rbx, rsi    ; rbx <- a.div
+    mov r14, rdx    ; r14 <- b.quotien
+    mov r15, rcx    ; r15 <- b.div
+
+
+    ; mis en argument
+    mov rdi, rbx    ; arg1 = a.d
+    mov rsi, r15    ; arg2 = b.d
+
+    ; appel de la fonction pgcd
+    sub rsp,8
+    call pgcd
+    add rsp,8
+
+    ; calcul a.div/pgcd
+    mov rdi,rax;pgcd ->rdi
+    mov rax,rbx 
+    xor rdx,rdx
+    div rdi
+    ; calcul quo b
+    mul r14
+    mov r14,rax;pois faible quo
+    mov r13,rdx;pois fort quo
+    ; r15->b.div
+    ; r14->poids faible de quo final
+    ; r13->poids fort de quo final
+    ; r12->a.quo
+    ; rbx->a.div
+    ; rdi->pgcd
+
+    ; calcul b.div/pgcd
+    mov rax,r15
+    xor rdx,rdx
+    div rdi
+    ; cal du sd quo
+    mov r11,rax;
+    mul rbx
+    mov rbx,rax; rbx<-poids faible de div 
+    mov r15,rdx; r15<-poids fort de div
+    mov rax,r11
+    mul r12
+    add r13,rdx
+    add r14,rax
+    ;todo verifie que rbx==r13==0
+    mov rdi,rbx
+    mov rsi,r14
+    call pgcd
+    cmp rax,1
+    je add_fact.fin1
+    mov r8,rax
+    xor rdx,rdx
+    mov rax,rbx
+    div r8
+    mov rbx,rax
+    xor rdx,rdx
+    mov rax,r14
+    div r8
+    mov rdx,rbx
+    jmp add_fact.retour
 
 
 
@@ -113,3 +129,22 @@ add_fact:
 
 
 
+.fin1:
+    mov rax,r14
+    mov rdx,rbx
+    jmp add_fact.retour
+
+
+
+
+
+
+
+
+.retour:
+    pop rbx
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    ret
