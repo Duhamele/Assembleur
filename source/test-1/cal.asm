@@ -148,3 +148,50 @@ add_fact:
     pop r13
     pop r12
     ret
+
+
+
+reste_int_128:
+    ;rdi ->fort quo
+    ;rsi ->faible quo
+    ;rdx ->fort div
+    ;rcx ->faible div
+    ;r8-> index quo
+    ;r9-> index div
+    ;
+    bsr r8,rdi
+    jz reste_int_128.quo_in_int_64
+    bsr r9,rdx
+    jz reste_int_128.div_in_int_64
+    cmp r9,r8
+    jae reste_int_128.div_great_quo
+    sub r8,r9 ;r8-r9
+
+
+
+
+
+
+.div_in_int_64:
+
+
+;
+.quo_in_int_64:
+    cmp rdx,0
+    je reste_int_128.div_and_quo_in_int_64
+    mov rax,0
+    mov rdx,rsi
+    ret 
+
+;
+;
+; cas div et quo in 64
+.div_and_quo_in_int_64:
+
+
+.div_great_quo:
+
+
+
+
+
